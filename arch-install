@@ -1,0 +1,47 @@
+#!/bin/bash
+
+# первоначальная настройка 
+
+loadkeys ru
+setfont cyr-sun16
+timedatectl set-ntp true
+
+# установка нужных пакетов 
+
+pacman -Sy wget btrfs-progs arch-install-scripts
+
+# работа с диском
+
+echo -e '\n\n нужна разметка диска? \n\n'
+read -p " 1 - да, 0 - нет: " diski
+   if [[ $diski == 1 ]]; then 
+     read -p "какой диск или раздел будем разбивать?: " cfd
+       cfdisk /dev/$cfd
+    elif [[ $diski == 0 ]]; then
+      echo 'разметка диска пропущена'
+    fi
+clear
+read -p " укажите раздел root: " root
+  mkfs.btrfs -f -L WD /dev/$root
+   mount /dev/$root /mnt
+  btrfs subvolume create /mnt/@
+  btrfs subvolume create /mnt/@home
+  umount /mnt
+  mount -o subvol=@,compress=zstd /dev/$root /mnt
+  mkdir /mnt/home
+  mount -o subvol=@home,compress=zstd /dev/$root /mnt/home
+clear
+  read -p "\n\n укажите раздел для /boot/efi: \n\n" $efi
+  mkfs.fat -F32 /dev/$efi
+  mkdir -p /mnt/boot/efi
+  mount /dev/$efi /mnt/boot/efi
+echo -e '\n\n Установка пакетов \n\n'
+  pacstrap /mnt base base-devel linux linux-firmware networkmanager  xf86-video-intel xf86-video-nouveau fish nano btrfs-progs wget git  intel-ucode  xorg-xinit xorg-server 
+  
+# Создаём fstab 
+ genfstab -pU /mnt >> /mnt/etc/fstab
+clear
+
+# chroot 
+
+arch-chroot /mnt /bin/fish
