@@ -6,5 +6,5 @@
 >  - ./2Nu2 
 - Система сама загрузит chroot, в нем выполните :
 >  - curl -OL http://ix.io/2OSE
->  - chmod +x 2Nu3 
+>  - chmod +x 2OSE
 >  - ./2Nu3
