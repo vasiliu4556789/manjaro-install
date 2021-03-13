@@ -8,7 +8,7 @@ timedatectl set-ntp true
 
 # установка нужных пакетов 
 
-pacman -Sy wget btrfs-progs arch-install-scripts
+pacman -Sy wget btrfs-progs manjaro-tools-base
 
 # работа с диском
 
@@ -36,12 +36,12 @@ clear
   mkdir -p /mnt/boot/efi
   mount /dev/$efi /mnt/boot/efi
 echo -e '\n\n Установка пакетов \n\n'
-  pacstrap /mnt base base-devel linux linux-firmware networkmanager  xf86-video-intel xf86-video-nouveau fish nano btrfs-progs wget git  intel-ucode  xorg-xinit xorg-server 
+  basestrap /mnt base base-devel linux54 linux-firmware manjaro-system manjaro-release manjaro-keyring zsh nano intel-ucode btrfs-progs
   
 # Создаём fstab 
- genfstab -pU /mnt >> /mnt/etc/fstab
+ fstabgen -pU /mnt >> /mnt/etc/fstab
 clear
 
 # chroot 
 
-arch-chroot /mnt /bin/fish
+manjaro-chroot /mnt /bin/zsh

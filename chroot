@@ -7,7 +7,7 @@ echo -e '\n\n'
 clear
  echo -e 'Создаём рам-диск mkinitcpio \n\n\n'
  echo -e 'В /etc/mkinitcpio.conf, в разделе HOOKS, должен быть прописан хук keyboard keymap, убрать fsck \n\n\n\n'
- echo -e 'В разделе MODULES нужно прописать свой драйвер видеокарты: i915 для Intel, radeon для AMD, nouveau для Nvidia  \n\n\n'
+ echo -e 'В разделе MODULES нужно прописать свой драйвер видеокарты: i915 для Intel, (amdgpu radeon) для AMD, nouveau для Nvidia  \n\n\n'
  read -p " вы готовы ? 1 - да, 0 - нет: " mkn
    if [[ $mkn == 0 ]]; then
       echo 'пропущенно'
@@ -39,7 +39,7 @@ echo -e 'Вписываем KEYMAP=ru FONT=cyr-sun16 \n\n\n\n'
  echo 'FONT=cyr-sun16' >> /etc/vconsole.conf
 
 echo -e 'Создадим загрузочный RAM диск \n\n\n\n'
- mkinitcpio -p linux
+ mkinitcpio -p linux54
 echo -e '\n\n\n'
 
 echo -e 'Добавляем пользователя \n\n\n'
@@ -53,10 +53,10 @@ passwd $username
 echo '%wheel ALL=(ALL) ALL' >> /etc/sudoers
 echo''
 
-echo -e 'Раскомментируем репозиторий multilib Для работы 32-битных приложений в 64-битной системе \n\n'
- echo '[multilib]' >> /etc/pacman.conf
- echo 'Include = /etc/pacman.d/mirrorlist' >> /etc/pacman.conf
- pacman -Syy
+#echo -e 'Раскомментируем репозиторий multilib Для работы 32-битных приложений в 64-битной системе \n\n'
+# echo '[multilib]' >> /etc/pacman.conf
+# echo 'Include = /etc/pacman.d/mirrorlist' >> /etc/pacman.conf
+  pacman -Syy
 
 
 echo -e 'Подключаем автозагрузку NetworkManager \n\n'
@@ -74,7 +74,7 @@ read -p " 1 - да, 0 - нет: " gnome
    if [[ $diski == 0 ]]; then
       echo 'gnome не будет установлен'
    elif [[ $gnome == 1 ]]; then 
-     pacman -Syu gnome-shell gnome-control-center gnome-tweaks nautilus gnome-terminal
+     pacman -Syu gnome-shell gnome-control-center gnome-tweaks nautilus gnome-terminal networkmanager xorg-xinit xf86-video-amdgpu wget git 
    fi
   
 echo -e 'установить gdm ? \n\n'
