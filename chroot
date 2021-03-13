@@ -74,13 +74,13 @@ read -p " 1 - да, 0 - нет: " gnome
    if [[ $diski == 0 ]]; then
       echo 'gnome не будет установлен'
    elif [[ $gnome == 1 ]]; then 
-     pacman -Syu gnome-shell gnome-control-center gnome-tweaks nautilus gnome-terminal networkmanager xorg-xinit xf86-video-amdgpu wget git 
+     pacman -Syu gnome-shell gnome-control-center gnome-tweaks nautilus gnome-terminal networkmanager xorg-xinit xf86-video-amdgpu wget git yay
    fi
   
 echo -e 'установить gdm ? \n\n'
   read -p " 1 - да, 0 - нет: " gdm
     if [[ $gdm == 1 ]]; then
-       pacman -S gdm $$ systemctl enable gdm
+       pacman -S gdm && systemctl enable gdm
     elif [[ $gdm == 0 ]]; then
        echo -e 'gdm не будет установлен \n\n'    
     fi
