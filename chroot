@@ -21,6 +21,14 @@ echo -e '\n\n Прописываем имя компьютера \n\n'
  ln -svf /usr/share/zoneinfo/Europe/Moscow /etc/localtime
 echo -e '\n\n\n\n\n'
 
+echo -e '\n\n Прописываем host \n\n'
+tee <<EOF /etc/hosts >/dev/null
+127.0.0.1 localhost
+::1       localhost
+127.0.1.1 $hostname.localdomain $hostname
+EOF
+echo -e '\n\n\n\n\n'
+
 echo -e '\n\n Добавляем русскую локаль системы \n\n'
  sed -i "s/#\(en_US\.UTF-8\)/\1/" /etc/locale.gen
  sed -i "s/#\(ru_RU\.UTF-8\)/\1/" /etc/locale.gen
