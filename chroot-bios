@@ -32,7 +32,6 @@ echo -e '\n\n\n\n\n'
 echo -e '\n\n Добавляем русскую локаль системы \n\n'
  sed -i "s/#\(en_US\.UTF-8\)/\1/" /etc/locale.gen
  sed -i "s/#\(ru_RU\.UTF-8\)/\1/" /etc/locale.gen
- locale-gen
 echo -e '\n\n\n\n\n'
 
 echo -e 'Обновим текущую локаль системы \n\n'
