@@ -2,9 +2,9 @@
 
 # первоначальная настройка 
 
-loadkeys ru
-setfont cyr-sun16
-timedatectl set-ntp true
+#loadkeys ru
+#setfont cyr-sun16
+#timedatectl set-ntp true
 
 # установка нужных пакетов 
 
@@ -27,19 +27,18 @@ read -p " укажите раздел root: " root
   btrfs subvolume create /mnt/@
   btrfs subvolume create /mnt/@home
   umount /mnt
-  mount -o subvol=@,compress=zstd /dev/$root /mnt
+  mount -o subvol=@,compress=zstd,nossd /dev/$root /mnt
   mkdir /mnt/home
-  mount -o subvol=@home,compress=zstd /dev/$root /mnt/home
+  mount -o subvol=@home,compress=zstd,nossd /dev/$root /mnt/home
 clear
-  read -p "\n\n укажите раздел для /boot/efi: \n\n" $efi
-  mkfs.fat -F32 /dev/$efi
-  mkdir -p /mnt/boot/efi
-  mount /dev/$efi /mnt/boot/efi
+
+
 echo -e '\n\n Установка пакетов \n\n'
-  basestrap /mnt base base-devel linux54 linux-firmware manjaro-system manjaro-release manjaro-keyring zsh nano intel-ucode btrfs-progs
+  basestrap /mnt base base-devel linux54 linux-firmware manjaro-release manjaro-keyring zsh nano intel-ucode btrfs-progs grub networkmanager
   
 # Создаём fstab 
  fstabgen -pU /mnt >> /mnt/etc/fstab
+ nano /mnt/etc/fstab
 clear
 
 # chroot 
