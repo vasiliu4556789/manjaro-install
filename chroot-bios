@@ -2,10 +2,10 @@
 
 read -p "Введите имя компьютера: " hostname
 read -p "Введите имя пользователя: " username
-echo -e '\n\n'
+
 
 clear
- echo -e 'Создаём рам-диск mkinitcpio \n\n\n'
+ echo -e 'Создаём рам-диск mkinitcpio \n'
  echo -e 'В /etc/mkinitcpio.conf, в разделе HOOKS, должен быть прописан хук keyboard keymap, убрать fsck \n\n\n\n'
  echo -e 'В разделе MODULES нужно прописать свой драйвер видеокарты: i915 для Intel, (amdgpu radeon) для AMD, nouveau для Nvidia  \n\n\n'
  read -p " вы готовы ? 1 - да, 0 - нет: " mkn
@@ -16,18 +16,18 @@ clear
     fi
 
 clear
-echo -e '\n\n Прописываем имя компьютера \n\n'
+echo -e '\n Прописываем имя компьютера \n'
  echo $hostname > /etc/hostname
  ln -svf /usr/share/zoneinfo/Europe/Moscow /etc/localtime
-echo -e '\n\n\n\n\n'
+echo -e '\n\n'
 
-echo -e '\n\n Прописываем host \n\n'
+echo -e '\n Прописываем host \n'
 tee <<EOF /etc/hosts >/dev/null
 127.0.0.1 localhost
 ::1       localhost
 127.0.1.1 $hostname.localdomain $hostname
 EOF
-echo -e '\n\n\n\n\n'
+echo -e '\n\n'
 
 echo -e '\n\n Добавляем русскую локаль системы \n\n'
  sed -i "s/#\(en_US\.UTF-8\)/\1/" /etc/locale.gen
@@ -36,9 +36,9 @@ echo -e '\n\n\n\n\n'
 
 echo -e 'Обновим текущую локаль системы \n\n'
  locale-gen
-echo -e '\n\n'
+echo -e '\n'
 
-echo -e 'Указываем язык системы \n\n'
+echo -e 'Указываем язык системы \n'
  echo 'LANG="ru_RU.UTF-8"' > /etc/locale.conf
 
 echo -e 'Вписываем KEYMAP=ru FONT=cyr-sun16 \n\n\n\n'
@@ -47,7 +47,7 @@ echo -e 'Вписываем KEYMAP=ru FONT=cyr-sun16 \n\n\n\n'
 
 echo -e 'Создадим загрузочный RAM диск \n\n\n\n'
  mkinitcpio -p linux54
-echo -e '\n\n\n'
+echo -e '\n'
 
 echo -e 'Добавляем пользователя \n\n\n'
 useradd -m -g users -G wheel -s /bin/zsh $username
@@ -63,9 +63,11 @@ echo''
 #echo -e 'Раскомментируем репозиторий multilib Для работы 32-битных приложений в 64-битной системе \n\n'
 # echo '[multilib]' >> /etc/pacman.conf
 # echo 'Include = /etc/pacman.d/mirrorlist' >> /etc/pacman.conf
-  pacman -Syy
-  pacman-mirrors --country Germany Russia
-  pacman-mirrors -f5
+echo -e 'Настройка репозиториев \n\n'
+ pacman-mirrors --country Germany Russia
+ pacman-mirrors -f5
+ pacman -Syy
+echo -e '\n'  
 
 
 echo -e 'Подключаем автозагрузку NetworkManager \n\n'
