@@ -19,6 +19,7 @@ clear
 echo -e '\n Прописываем имя компьютера \n'
  echo $hostname > /etc/hostname
  ln -svf /usr/share/zoneinfo/Europe/Moscow /etc/localtime
+ hwclock --systohc
 echo -e '\n\n'
 
 echo -e '\n Прописываем host \n'
@@ -44,8 +45,15 @@ echo -e 'Указываем язык системы \n'
 echo -e 'Вписываем KEYMAP=ru FONT=cyr-sun16 \n\n\n\n'
  echo 'KEYMAP=ru' >> /etc/vconsole.conf
  echo 'FONT=cyr-sun16' >> /etc/vconsole.conf
+ 
+echo -e 'Настройка репозиториев \n\n'
+ pacman-mirrors --country Germany Russia
+ pacman-mirrors -f5
+ pacman -Syy
+echo -e '\n'  
 
 echo -e 'Создадим загрузочный RAM диск \n\n\n\n'
+ pacman -S intel-ucode --noconfirm
  mkinitcpio -p linux54
 echo -e '\n'
 
@@ -63,18 +71,13 @@ echo''
 #echo -e 'Раскомментируем репозиторий multilib Для работы 32-битных приложений в 64-битной системе \n\n'
 # echo '[multilib]' >> /etc/pacman.conf
 # echo 'Include = /etc/pacman.d/mirrorlist' >> /etc/pacman.conf
-echo -e 'Настройка репозиториев \n\n'
- pacman-mirrors --country Germany Russia
- pacman-mirrors -f5
- pacman -Syy
-echo -e '\n'  
-
-
+ 
 echo -e 'Подключаем автозагрузку NetworkManager \n\n'
+ pacman -S networkmanager --noconfirm
  systemctl enable NetworkManager
 
 echo -e 'Создаем нужные директории \n\n'
- sudo pacman -S xdg-user-dirs --noconfirm
+ pacman -S xdg-user-dirs --noconfirm
  LANG=C xdg-user-dirs-update --force
 
 
@@ -85,7 +88,7 @@ read -p " 1 - да, 0 - нет: " gnome
    if [[ $diski == 0 ]]; then
       echo 'gnome не будет установлен'
    elif [[ $gnome == 1 ]]; then 
-     pacman -Syu gnome-shell gnome-control-center gnome-tweaks nautilus gnome-terminal  xorg-xinit xf86-video-amdgpu wget git yay
+     pacman -S gnome-shell gnome-control-center gnome-tweaks nautilus gnome-terminal
    fi
   
 echo -e 'установить gdm ? \n\n'
@@ -95,11 +98,24 @@ echo -e 'установить gdm ? \n\n'
     elif [[ $gdm == 0 ]]; then
        echo -e 'gdm не будет установлен \n\n'    
     fi
+
+
+echo -e 'Подключаем swap ?\n\n'
+read -p " 1 - да, 0 - нет: " swap
+    if [[ $swap == 1 ]]; then
+       pacman -S systemd-swap && systemctl enable systemd-swap
+    elif [[ $swap == 0 ]]; then
+       echo -e 'swap не будет установлен \n\n'    
+    fi
+
+
+
+
     
 read -p " укажите устройство sdx куда ставить grub: " grub
 
      grub-install  /dev/$grub
-     pacman -S grub-theme-manjaro
+     pacman -S grub grub-theme-manjaro --noconfirm
      #grub-mkconfig -o /boot/grub/grub.cfg
     
 echo -e ' установка завершена \n\n'
