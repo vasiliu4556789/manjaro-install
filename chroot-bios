@@ -116,7 +116,8 @@ read -p " укажите устройство sdx куда ставить grub: 
 
      grub-install  /dev/$grub
      pacman -S grub grub-theme-manjaro --noconfirm
-     #grub-mkconfig -o /boot/grub/grub.cfg
+     sed -i 's/.*GRUB_CMDLINE_LINUX_DEFAULT=*.*/GRUB_CMDLINE_LINUX_DEFAULT="modprobe.blacklist=radeon radeon.si_support=0 amdgpu.si_support=1 udev.log_priority=3"/'/etc/default/grub 
+     grub-mkconfig -o /boot/grub/grub.cfg
     
 echo -e ' установка завершена \n\n'
 
