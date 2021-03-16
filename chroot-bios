@@ -66,6 +66,7 @@ passwd
 echo -e 'Устанавливаем пароль пользователя \n\n'
 passwd $username
 echo '%wheel ALL=(ALL) ALL' >> /etc/sudoers
+echo '%wheel ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/10-installer
 echo''
 
 #echo -e 'Раскомментируем репозиторий multilib Для работы 32-битных приложений в 64-битной системе \n\n'
@@ -88,7 +89,7 @@ read -p " 1 - да, 0 - нет: " gnome
    if [[ $diski == 0 ]]; then
       echo 'gnome не будет установлен'
    elif [[ $gnome == 1 ]]; then 
-     pacman -S gnome-shell gnome-control-center gnome-tweaks nautilus gnome-terminal --noconfirm
+     pacman -S gnome-shell gnome-control-center gnome-tweaks nautilus tilix gnome-calculator pipewire-alsa pipewire-pulse --noconfirm
    fi
   
 echo -e 'установить gdm ? \n\n'
@@ -103,7 +104,12 @@ echo -e 'установить gdm ? \n\n'
 echo -e 'Подключаем swap ?\n\n'
 read -p " 1 - да, 0 - нет: " swap
     if [[ $swap == 1 ]]; then
-       pacman -S systemd-swap --noconfirm && systemctl enable systemd-swap
+       pacman -S systemd-swap --noconfirm
+       mkdir /etc/systemd/swap.conf.d
+       echo 'zram_enabled=1'  > /etc/systemd/swap.conf.d/overrides.conf
+       echo 'zram_size=$(( RAM_SIZE / 2 ))'  >> /etc/systemd/swap.conf.d/overrides.conf
+       echo 'swapfc_enabled=1'  >> /etc/systemd/swap.conf.d/overrides.conf
+       systemctl enable systemd-swap
     elif [[ $swap == 0 ]]; then
        echo -e 'swap не будет установлен \n\n'    
     fi
@@ -113,10 +119,9 @@ read -p " 1 - да, 0 - нет: " swap
 
     
 read -p " укажите устройство sdx куда ставить grub: " grub
-
-     grub-install  /dev/$grub
      pacman -S grub grub-theme-manjaro --noconfirm
-     sed -i 's/.*GRUB_CMDLINE_LINUX_DEFAULT=*.*/GRUB_CMDLINE_LINUX_DEFAULT="modprobe.blacklist=radeon radeon.si_support=0 amdgpu.si_support=1 udev.log_priority=3"/'/etc/default/grub 
+     grub-install  /dev/$grub
+     sed -i 's/.*GRUB_CMDLINE_LINUX_DEFAULT=*.*/GRUB_CMDLINE_LINUX_DEFAULT="modprobe.blacklist=radeon radeon.si_support=0 amdgpu.si_support=1 udev.log_priority=3"/' /etc/default/grub 
      grub-mkconfig -o /boot/grub/grub.cfg
     
 echo -e ' установка завершена \n\n'
