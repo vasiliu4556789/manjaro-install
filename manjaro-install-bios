@@ -16,24 +16,27 @@ pacman -Sy wget btrfs-progs manjaro-tools-base
 
 # работа с диском
 
-echo -e '\n\n нужна разметка диска? \n\n'
-read -p " 1 - да, 0 - нет: " diski
-   if [[ $diski == 1 ]]; then 
-     read -p "какой диск или раздел будем разбивать?: " cfd
-       cfdisk /dev/$cfd
-    elif [[ $diski == 0 ]]; then
-      echo 'разметка диска пропущена'
-    fi
-clear
+#echo -e '\n\n нужна разметка диска? \n\n'
+#read -p " 1 - да, 0 - нет: " diski
+#   if [[ $diski == 1 ]]; then 
+#     read -p "какой диск или раздел будем разбивать?: " cfd
+#       cfdisk /dev/$cfd
+#    elif [[ $diski == 0 ]]; then
+#      echo 'разметка диска пропущена'
+#    fi
+#clear
 read -p " укажите раздел root: " root
   mkfs.btrfs -f -L Manjaro /dev/$root
    mount /dev/$root /mnt
   btrfs subvolume create /mnt/@
   btrfs subvolume create /mnt/@home
   umount /mnt
-  mount -o subvol=@,compress=zstd,nossd /dev/$root /mnt
+  mount -o subvol=@,compress=zstd,autodefrag,discard /dev/$root /mnt
   mkdir /mnt/home
-  mount -o subvol=@home,compress=zstd,nossd /dev/$root /mnt/home
+  mount -o subvol=@home,compress=zstd,autodefrag,discard /dev/$root /mnt/home
+  mkdir /mnt/boot
+  mount /dev/sda1 /mnt/boot
+  
 clear
 
 

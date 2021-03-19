@@ -43,7 +43,7 @@ echo -e 'Указываем язык системы \n'
  echo 'LANG="ru_RU.UTF-8"' > /etc/locale.conf
 
 echo -e 'Вписываем KEYMAP=ru FONT=cyr-sun16 \n\n\n\n'
- echo 'KEYMAP=ru' >> /etc/vconsole.conf
+ echo 'KEYMAP=ru' >> /etc/vconsole.conf1
  echo 'FONT=cyr-sun16' >> /etc/vconsole.conf
  
 echo -e 'Настройка репозиториев \n\n'
@@ -108,7 +108,7 @@ read -p " 1 - да, 0 - нет: " swap
        mkdir /etc/systemd/swap.conf.d
        echo 'zram_enabled=1'  > /etc/systemd/swap.conf.d/overrides.conf
        echo 'zram_size=$(( RAM_SIZE / 2 ))'  >> /etc/systemd/swap.conf.d/overrides.conf
-       echo 'swapfc_enabled=1'  >> /etc/systemd/swap.conf.d/overrides.conf
+#       echo 'swapfc_enabled=1'  >> /etc/systemd/swap.conf.d/overrides.conf
        systemctl enable systemd-swap
     elif [[ $swap == 0 ]]; then
        echo -e 'swap не будет установлен \n\n'    

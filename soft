@@ -1,3 +1,45 @@
-pacman -S micro xclip wl-clipboard xdg-utils mailcap pikaur celluloid chrome-gnome-shell chromium dconf-editor exfat-utils flameshot gedit gnome-shell-extension-dash-to-panel gnome-shell-extension-pop-shell gvfs-mtp htop inxi libreoffice-fresh libreoffice-fresh-ru mintstick neofetch ntfs-3g pamac-gnome-integration pamac-gtk pkgfile pop-shell-shortcuts timeshift vivaldi vivaldi-ffmpeg-codecs wget git xcursor-breeze exfat-utils manjaro-tools-base gthumb gnome-calculator evince gnome-weather 
+pacman -S micro xclip wl-clipboard xdg-utils mailcap pikaur celluloid chrome-gnome-shell chromium dconf-editor exfat-utils flameshot gedit gnome-shell-extension-dash-to-panel gnome-shell-extension-pop-shell gvfs-mtp htop inxi libreoffice-fresh libreoffice-fresh-ru mintstick neofetch ntfs-3g pamac-gnome-integration pamac-gtk pkgfile pop-shell-shortcuts timeshift vivaldi vivaldi-ffmpeg-codecs wget git xcursor-breeze exfat-utils manjaro-tools-base gthumb gnome-calculator evince gnome-weather gnome-keyring grc python-nautilus ttf-caladea ttf-carlito ttf-croscore ttf-dejavu ttf-liberation fileroller unrar p7zip zip gtkhash-nautilus nautilus-empty-file  nautilus-admin gnome-icon-theme stacer earlyoom meld gparted
 
-kotatogram-desktop-bin wakeonlan
+kotatogram-desktop-bin wakeonlan suru-plus-dark-git glxinfo
+
+
+sudo systemctl enable --now earlyoom
+sudo systemctl enable --now dhcpcd.service
+sudo systemctl enable systemd-resolved.service
+
+micro /etc/resolv.conf
+
+nameserver 1.1.1.1
+
+micro /etc/nsswitch.conf
+dns
+
+
+micro /etc/vconsole.conf
+
+KEYMAP="ruwin_alt_sh-UTF-8"
+LOCALE="ru_RU.UTF-8"
+CONSOLEMAP=
+FONT="cyr-sun16"
+USECOLOR="yes"
+
+echo GRUB_DISABLE_OS_PROBER=false|sudo tee -a /etc/default/grub && sudo update-grub
+
+
+sudo grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id="Arch Linux"
+$ sudo grub-mkconfig -o /boot/grub/grub.cfg
+
+# Замена в тексте
+$ echo "This is a test" | sed 's/test/another test/'
+sudo fdisk -l
+
+
+# Замена в тексте
+$ echo "This is a test" | sed 's/test/another test/'
+
+# Ключ -e позволяет выполнить несколько команд:
+#   sed -e 's/This/That/; s/test/another test/'
+
+# Перевод регистра
+$ echo lowercase | tr '[:lower:]' '[:upper:]'
+LOWERCASE
