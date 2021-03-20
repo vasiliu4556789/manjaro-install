@@ -43,7 +43,7 @@ echo -e 'Указываем язык системы \n'
  echo 'LANG="ru_RU.UTF-8"' > /etc/locale.conf
 
 echo -e 'Вписываем KEYMAP=ru FONT=cyr-sun16 \n\n\n\n'
- echo 'KEYMAP="ruwin_alt_sh-UTF-8"' >> /etc/vconsole.conf1
+ echo 'KEYMAP="ruwin_alt_sh-UTF-8"' >> /etc/vconsole.conf
  echo 'FONT=cyr-sun16' >> /etc/vconsole.conf
  
 echo -e 'Настройка репозиториев \n\n'
