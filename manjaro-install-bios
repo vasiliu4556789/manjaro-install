@@ -14,6 +14,11 @@
 
 pacman -Sy wget btrfs-progs manjaro-tools-base
 
+
+echo -e '\n\n Просмотр разделов \n\n'
+   fdisk -l
+
+
 # работа с диском
 
 #echo -e '\n\n нужна разметка диска? \n\n'
@@ -25,23 +30,31 @@ pacman -Sy wget btrfs-progs manjaro-tools-base
 #      echo 'разметка диска пропущена'
 #    fi
 #clear
+
 read -p " укажите раздел root: " root
   mkfs.btrfs -f -L Manjaro /dev/$root
    mount /dev/$root /mnt
   btrfs subvolume create /mnt/@
   btrfs subvolume create /mnt/@home
   umount /mnt
-  mount -o subvol=@,compress=zstd,autodefrag,discard /dev/$root /mnt
+  mount -o subvol=@,compress=zstd,autodefrag,ssd /dev/$root /mnt
   mkdir /mnt/home
-  mount -o subvol=@home,compress=zstd,autodefrag,discard /dev/$root /mnt/home
+  mount -o subvol=@home,compress=zstd,autodefrag,ssd /dev/$root /mnt/home
+  
+read -p " укажите раздел boot: " boot
+  mkfs.ext2 -F -L boot /dev/$boot  
   mkdir /mnt/boot
-  mount /dev/sda1 /mnt/boot
+  mount /dev/$boot /mnt/boot
+  
+#Шпаргалка по управлению  
+#sudo btrfs subvolume snapshot /mnt/@ /mnt/@test
+#sudo btrfs subvolume delete /mnt/@test/
   
 clear
 
 
 echo -e '\n\n Установка пакетов \n\n'
-  basestrap /mnt base base-devel linux54 linux-firmware manjaro-release manjaro-keyring zsh nano btrfs-progs xf86-video-amdgpu
+  basestrap /mnt base base-devel linux54 linux-firmware manjaro-release manjaro-keyring zsh nano btrfs-progs
   
 # Создаём fstab 
  fstabgen -pU /mnt >> /mnt/etc/fstab
