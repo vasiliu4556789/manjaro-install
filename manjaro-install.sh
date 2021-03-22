@@ -30,6 +30,7 @@ echo -e '\n\n Показать список разделов ?\n\n'
 read -p " 1 - да, 0 - нет: " fdisk
     if [[ $fdisk == 1 ]]; then
       fdisk -l
+      echo -e ' Пропущено  \n\n\n'
       elif [[ $fdisk == 0 ]]; then
       echo -e ' Пропущено  \n\n'
       clear            
