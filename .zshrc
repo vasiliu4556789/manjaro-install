@@ -2,8 +2,10 @@
 
 export TERM="xterm-256color" # This sets up colors properly
 export EDITOR='micro'
-export PATH="$PATH:~/.dotnet/tools"
-export GTK_USE_PORTAL=1
+#export PATH="$PATH:~/.dotnet/tools"
+#export GTK_USE_PORTAL=1
+#DIFFPROG=meld
+
 
 
 
@@ -17,7 +19,7 @@ setopt autocd
 #export LC_LANG=en_US.UTF-8
 #export LC_ALL=en_US.UTF-8
 # You may need to manually set your language environment
-#export LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
 #export LANG=ru_RU.UTF-8
 #export LANG=en_US.UTF-8
 
@@ -146,6 +148,11 @@ compinit
 #История команд ctrl+z
 function h() {
   print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | gsed -r 's/ *[0-9]*\*? *//' | gsed -r 's/\\/\\\\/g')
+}
+
+#Запуск без привязки к терминалу
+fu() {
+  nohup "$@" &>/dev/null & disown
 }
 
 zle -N h
