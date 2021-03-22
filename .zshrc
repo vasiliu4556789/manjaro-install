@@ -6,11 +6,6 @@ export EDITOR='micro'
 #export GTK_USE_PORTAL=1
 #DIFFPROG=meld
 
-
-
-
-#autoload -U compinit && compinit
-
 # просто наберите нужный каталог и окажитесь в нём
 setopt autocd
 
