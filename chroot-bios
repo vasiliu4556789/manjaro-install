@@ -3,17 +3,50 @@
 read -p "Введите имя компьютера: " hostname
 read -p "Введите имя пользователя: " username
 
-
 clear
- echo -e 'Создаём рам-диск mkinitcpio \n'
- echo -e 'В /etc/mkinitcpio.conf, в разделе HOOKS, должен быть прописан хук keyboard keymap, убрать fsck \n\n\n\n'
- echo -e 'В разделе MODULES нужно прописать свой драйвер видеокарты: i915 для Intel, (amdgpu radeon) для AMD, nouveau для Nvidia  \n\n\n'
- read -p " вы готовы ? 1 - да, 0 - нет: " mkn
-   if [[ $mkn == 0 ]]; then
-      echo 'пропущенно'
-   elif [[ $mkn == 1 ]]; then 
-     nano /etc/mkinitcpio.conf
-    fi
+
+echo -e 'Настройка репозиториев \n\n'
+ pacman-mirrors --country Germany Russia
+ pacman -Syy
+echo -e '\n'
+clear
+
+echo -e 'Создаём рам-диск mkinitcpio \n'
+echo -e 'В /etc/mkinitcpio.conf, в разделе HOOKS, должен быть прописан хук keyboard keymap, убрать fsck \n\n\n\n'
+
+echo -e 'У вас ssd ? \n'
+read -p "1 - ssd , 0 - нет:" ssd
+   if [[ $ssd == 0 ]]; then
+     echo ''
+   elif [[ $ssd == 1 ]]; then
+     sed -i 's/.*HOOKS=(base udev autodetect modconf block filesystems keyboard fsck).*/HOOKS=(base udev autodetect modconf block filesystems keyboard keymap)/' /etc/mkinitcpio.conf     
+   fi 
+   
+echo -e 'У вас amd ? \n'
+read -p "1 - amd , 0 - нет:" amd
+   if [[ $amd == 0 ]]; then
+     echo ''
+   elif [[ $amd == 1 ]]; then
+     sed -i 's/.*MODULES=().*/MODULES=(amdgpu radeon)/' /etc/mkinitcpio.conf
+     pacman -S xf86-video-amdgpu --noconfirm
+   fi
+clear   
+   
+#echo -e 'У вас Intel ? \n'   
+#read -p "1 - intel , 0 - нет:" intel     
+#   if [[ $intel == 0 ]]; then
+#     echo ''
+#   elif [[ $intel == 1 ]]; then
+#   sed -i 's/.*MODULES=().*/MODULES=(i915)/' /etc/mkinitcpio.conf
+#   fi
+
+#echo -e 'У вас nvidia ? \n'   
+#read -p "1 - nvidia , 0 - нет:" nvidia     
+#   if [[ $nvidia == 0 ]]; then
+#     echo ''
+#   elif [[ $nvidia == 1 ]]; then
+#   sed -i 's/.*MODULES=().*/MODULES=(nouveau)/' /etc/mkinitcpio.conf
+#   fi    
 
 clear
 echo -e '\n Прописываем имя компьютера \n'
@@ -33,7 +66,7 @@ echo -e '\n\n'
 echo -e '\n\n Добавляем русскую локаль системы \n\n'
  sed -i "s/#\(en_US\.UTF-8\)/\1/" /etc/locale.gen
  sed -i "s/#\(ru_RU\.UTF-8\)/\1/" /etc/locale.gen
-echo -e '\n\n\n\n\n'
+echo -e '\n'
 
 echo -e 'Обновим текущую локаль системы \n\n'
  locale-gen
@@ -46,25 +79,21 @@ echo -e 'Вписываем KEYMAP=ru FONT=cyr-sun16 \n\n\n\n'
  echo 'KEYMAP="ruwin_alt_sh-UTF-8"' >> /etc/vconsole.conf
  echo 'FONT=cyr-sun16' >> /etc/vconsole.conf
  
-echo -e 'Настройка репозиториев \n\n'
- pacman-mirrors --country Germany Russia
- pacman-mirrors -f5
- pacman -Syy
-echo -e '\n'  
+ 
 
-echo -e 'Создадим загрузочный RAM диск \n\n\n\n'
+echo -e 'Создадим загрузочный RAM диск \n'
 # pacman -S amd-ucode --noconfirm
  pacman -S intel-ucode --noconfirm
  mkinitcpio -p linux54
 echo -e '\n'
 
-echo -e 'Добавляем пользователя \n\n\n'
+echo -e 'Добавляем пользователя \n'
 useradd -m -g users -G wheel -s /bin/zsh $username
 
-echo -e 'Создаем пароль root \n\n'
+echo -e 'Создаем пароль root \n'
 passwd 
 
-echo -e 'Устанавливаем пароль пользователя \n\n'
+echo -e 'Устанавливаем пароль пользователя \n'
 passwd $username
 echo '%wheel ALL=(ALL) ALL' >> /etc/sudoers
 #echo '%wheel ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/10-installer
@@ -78,7 +107,7 @@ echo''
 # pacman -S networkmanager --noconfirm && systemctl enable NetworkManager
  
 
-echo -e 'Подключаем автозагрузку dhcpcd \n\n'
+echo -e 'Подключаем автозагрузку dhcpcd \n'
  pacman -S dhcpcd --noconfirm && systemctl enable dhcpcd
  
 
@@ -91,7 +120,7 @@ echo -e  'дальше вы можете установить de/wm и dm на �
 
 echo -e 'установить минимальный gnome? \n'
 read -p " 1 - да, 0 - нет: " gnome
-   if [[ $diski == 0 ]]; then
+   if [[ $gnome == 0 ]]; then
       echo 'gnome не будет установлен'
    elif [[ $gnome == 1 ]]; then 
      pacman -S gnome-shell gnome-control-center gnome-tweaks nautilus tilix gnome-calculator pipewire-alsa pipewire-pulse gnome-keyring --noconfirm
@@ -115,6 +144,7 @@ read -p " 1 - да, 0 - нет: " swap
        echo 'zram_size=$(( RAM_SIZE / 2 ))'  >> /etc/systemd/swap.conf.d/overrides.conf
        echo 'swapfc_enabled=1'  >> /etc/systemd/swap.conf.d/overrides.conf
        systemctl enable systemd-swap
+       echo -e '\n\n' 
     elif [[ $swap == 0 ]]; then
        echo -e 'swap не будет установлен \n\n'    
     fi
@@ -133,7 +163,7 @@ read -p " укажите устройство sdx куда ставить grub: 
 #     grub-mkconfig -o /boot/grub/grub.cfg     
 
 
-echo -e 'Подключаем archlinuxcn ?\n\n'
+echo -e 'Подключаем archlinuxcn ?\n\n\n\n'
 read -p " 1 - да, 0 - нет: " archlinuxcn
     if [[ $archlinuxcn == 1 ]]; then
       echo '[archlinuxcn]'  >> /etc/pacman.conf
@@ -149,7 +179,7 @@ read -p " 1 - да, 0 - нет: " archlinuxcn
 #   sed -i 's/.*#SystemMaxUse=*.*/SystemMaxUse=50M/' /etc/systemd/journald.conf
    
 #Репы   
-#pacman -S micro xclip wl-clipboard xdg-utils mailcap pikaur celluloid chrome-gnome-shell chromium dconf-editor exfat-utils flameshot gedit gnome-shell-extension-dash-to-panel gnome-shell-extension-pop-shell gvfs-mtp htop inxi libreoffice-fresh libreoffice-fresh-ru mintstick neofetch ntfs-3g pamac-gnome-integration pamac-gtk pkgfile pop-shell-shortcuts timeshift vivaldi vivaldi-ffmpeg-codecs git xcursor-breeze exfat-utils manjaro-tools-base gthumb gnome-calculator evince gnome-weather grc python-nautilus ttf-caladea ttf-carlito ttf-croscore ttf-dejavu ttf-liberation file-roller unrar p7zip zip gtkhash-nautilus nautilus-empty-file nautilus-admin gnome-icon-theme stacer earlyoom meld gparted bpytop xdg-desktop-portal aspell transmission-gtk geary
+#pacman -S micro xclip wl-clipboard xdg-utils mailcap pikaur celluloid chrome-gnome-shell chromium dconf-editor exfat-utils flameshot gedit gnome-shell-extension-dash-to-panel gnome-shell-extension-pop-shell gvfs-mtp htop inxi libreoffice-fresh libreoffice-fresh-ru mintstick neofetch ntfs-3g pamac-gnome-integration pamac-gtk pkgfile pop-shell-shortcuts timeshift vivaldi vivaldi-ffmpeg-codecs git xcursor-breeze exfat-utils manjaro-tools-base gthumb gnome-calculator evince gnome-weather grc python-nautilus ttf-caladea ttf-carlito ttf-croscore ttf-dejavu ttf-liberation file-roller unrar p7zip zip gtkhash-nautilus nautilus-empty-file nautilus-admin gnome-icon-theme stacer earlyoom meld gparted bpytop xdg-desktop-portal aspell transmission-gtk geary speedtest-cli ttf-dejavu
 #systemctl enable --now earlyoom
 #Аур
 #pikaur -S kotatogram-desktop-bin wakeonlan suru-plus-dark-git glxinfo ocs-url    
