@@ -168,7 +168,7 @@ read -p " 1 - да, 0 - нет: " archlinuxcn
     if [[ $archlinuxcn == 1 ]]; then
       echo '[archlinuxcn]'  >> /etc/pacman.conf
       echo 'Server = http://repo.archlinuxcn.org/$arch'  >> /etc/pacman.conf
-      pacman -S archlinuxcn-keyring --noconfirm && pacman -Sy
+      pacman -Sy && pacman -S archlinuxcn-keyring --noconfirm
       elif [[ $archlinuxcn == 0 ]]; then
       echo -e 'archlinuxcn не будет подключен \n\n'            
     fi
