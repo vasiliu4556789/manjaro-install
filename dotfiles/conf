@@ -1,18 +1,18 @@
 #!/bin/zsh
 
 #environment
-echo 'EDITOR='micro'' >> /etc/environment
-echo 'DIFFPROG='meld'' >> /etc/environment
+#echo 'EDITOR='micro'' >> /etc/environment
+#echo 'DIFFPROG='meld'' >> /etc/environment
 
 
 
 #pacman.conf
-echo '[archlinuxcn]'  >> /etc/pacman.conf
-echo 'Server = http://repo.archlinuxcn.org/$arch'  >> /etc/pacman.conf
+#echo '[archlinuxcn]'  >> /etc/pacman.conf
+#echo 'Server = http://repo.archlinuxcn.org/$arch'  >> /etc/pacman.conf
 
-pacman -S archlinuxcn-keyring && pacman -Sy
+#pacman -S archlinuxcn-keyring && pacman -Sy
 
-sed -i 's/.*#SystemMaxUse=*.*/SystemMaxUse=50M/' /etc/systemd/journald.conf
+#sed -i 's/.*#SystemMaxUse=*.*/SystemMaxUse=50M/' /etc/systemd/journald.conf
 
 
 #mkdir /etc/systemd/swap.conf.d

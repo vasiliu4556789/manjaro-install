@@ -8,7 +8,7 @@
 
 #loadkeys ru
 #setfont cyr-sun16
-#timedatectl set-ntp true
+timedatectl set-ntp true
 
 # установка нужных пакетов 
 pacman -Sy wget btrfs-progs manjaro-tools-base
@@ -43,9 +43,9 @@ read -p " укажите раздел root: " root
   btrfs subvolume create /mnt/@
   btrfs subvolume create /mnt/@home
   umount /mnt
-  mount -o subvol=@,compress=zstd,autodefrag,ssd /dev/$root /mnt
+  mount -o subvol=@,compress=zstd,autodefrag,discard,ssd /dev/$root /mnt
   mkdir /mnt/home
-  mount -o subvol=@home,compress=zstd,autodefrag,ssd /dev/$root /mnt/home
+  mount -o subvol=@home,compress=zstd,autodefrag,discard,ssd /dev/$root /mnt/home
 
 #Закоментировать для efi  
 read -p " укажите раздел boot: " boot

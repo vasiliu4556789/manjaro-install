@@ -1,6 +1,6 @@
-pacman -S micro xclip wl-clipboard xdg-utils mailcap pikaur celluloid chrome-gnome-shell chromium dconf-editor exfat-utils flameshot gedit gnome-shell-extension-dash-to-panel gnome-shell-extension-pop-shell gvfs-mtp htop inxi libreoffice-fresh libreoffice-fresh-ru mintstick neofetch ntfs-3g pamac-gnome-integration pamac-gtk pkgfile pop-shell-shortcuts timeshift vivaldi vivaldi-ffmpeg-codecs wget git xcursor-breeze exfat-utils manjaro-tools-base gthumb gnome-calculator evince gnome-weather gnome-keyring grc python-nautilus ttf-caladea ttf-carlito ttf-croscore ttf-dejavu ttf-liberation fileroller unrar p7zip zip gtkhash-nautilus nautilus-empty-file  nautilus-admin gnome-icon-theme stacer earlyoom meld gparted
+pacman -S micro xclip wl-clipboard xdg-utils mailcap pikaur celluloid chrome-gnome-shell chromium dconf-editor exfat-utils flameshot gedit gnome-shell-extension-dash-to-panel gnome-shell-extension-pop-shell gvfs-mtp htop inxi libreoffice-fresh libreoffice-fresh-ru neofetch ntfs-3g pamac-gnome-integration pamac-gtk pkgfile pop-shell-shortcuts timeshift vivaldi vivaldi-ffmpeg-codecs wget git xcursor-breeze exfat-utils manjaro-tools-base gthumb gnome-calculator evince gnome-weather gnome-keyring grc python-nautilus ttf-caladea ttf-carlito ttf-croscore ttf-dejavu ttf-liberation file-roller unrar p7zip zip gtkhash-nautilus nautilus-empty-file nautilus-admin gnome-icon-theme stacer earlyoom meld gparted bpytop xdg-desktop-portal aspell transmission-gtk geary dhcpcd
 
-kotatogram-desktop-bin wakeonlan suru-plus-dark-git glxinfo
+kotatogram-desktop-bin wakeonlan suru-plus-dark-git glxinfo ocs-url recapp-git
 
 
 sudo systemctl enable --now earlyoom
@@ -27,10 +27,11 @@ echo GRUB_DISABLE_OS_PROBER=false|sudo tee -a /etc/default/grub && sudo update-g
 
 
 sudo grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id="Arch Linux"
-$ sudo grub-mkconfig -o /boot/grub/grub.cfg
+sudo grub-mkconfig -o /boot/grub/grub.cfg
 
 # Замена в тексте
 $ echo "This is a test" | sed 's/test/another test/'
+
 sudo fdisk -l
 
 
@@ -43,3 +44,13 @@ $ echo "This is a test" | sed 's/test/another test/'
 # Перевод регистра
 $ echo lowercase | tr '[:lower:]' '[:upper:]'
 LOWERCASE
+
+# Делаем дамп
+$ dconf dump / > /tmp/dconf
+# Редактируем и загружаем
+$ dconf load / < /tmp/dconf
+
+gsettings set org.gnome.desktop.interface gtk-theme "Flat-Remix-GTK-Blue"
+Обои gsettings set org.gnome.desktop.background picture-uri "file:///home/vasiliu/.local/share/backgrounds/2021-03-22-17-07-20-photo_2020-07-14_14-26-44.jpg" 
+Тема gsettings set org.gnome.desktop.interface gtk-theme "macOS-Vantablack"
+Погода  gsettings set org.gnome.shell.weather locations "[<(uint32 2, <('Луганск, Украина', '', false, [(0.84773623489858685, 0.68586753917934318)], [(0.83775804095727813, 0.65973445725385649)])>)>]"
